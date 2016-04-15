@@ -13,6 +13,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $confirmPassword;
 
     /**
      * @inheritdoc
@@ -33,6 +34,18 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['confirmPassword', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false, 'message' => 'Powtózone hasło jest nieprawidłowe.'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Nazwa użytkownika',
+            'email' => 'Adres E-mail',
+            'password' => 'Hasło',
+            'confirmPassword' => 'Powtórz hasło'
         ];
     }
 
