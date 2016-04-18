@@ -28,14 +28,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'wyloguj' => 'site/logout',
+                'kontakt' => 'site/contact',
+                'rejestracja' => 'site/signup',
+                'zresetuj-haslo' => 'site/request-password-reset'
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

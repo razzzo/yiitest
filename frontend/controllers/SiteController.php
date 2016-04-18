@@ -72,6 +72,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        new \common\debug\Debug(Yii::$app->formatter->asDatetime(time(), 'full'));
+        new \common\debug\Debug(Yii::$app->config->get('mail'));
+        new \common\debug\Debug(Yii::$app->config->get('mail', 'smtpHost'));
         return $this->render('index');
     }
 
@@ -209,5 +212,42 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Testowanie e-mail.
+     * @return mixed
+     */
+    public function actionEmailTest()
+    {
+        Yii::$app->mailer->setTransport([
+            'class' => 'Swift_SmtpTransport',
+            'host' => Yii::$app->config->get('mail', 'smtpHost'),
+            'port' => Yii::$app->config->get('mail', 'smtpPort'),
+            'username' => Yii::$app->config->get('mail', 'username'),
+            'password' => Yii::$app->config->get('mail', 'password'),
+        ]);
+
+        $result = Yii::$app->mailer->compose()
+            ->setTo('piotr.mroz@sga.waw.pl')
+            ->setFrom(['from@email.com' => 'Nazwa Od'])
+            ->setReplyTo(['reply@to.com' => 'Nazwa Odpowiedz Do'])
+            ->setSubject('Tytuł wiadomości')
+            ->setHtmlBody('<h1>Hello!</h1>')
+            ->setTextBody('Cześć!')
+            ->send();
+
+        new \common\debug\Debug($result);
+
+        return $this->render('about');
+    }
+    
+    /**
+     * Edycja danych użytkownika.
+     * @return mixed
+     */
+    public function actionProfile()
+    {
+        return $this->render('profile');
     }
 }

@@ -1,0 +1,15 @@
+DirectoryIndex index.php
+
+RewriteEngine on
+
+# Reguła przekierowujca z adresu bez www np domena.pl na adres z www.domena.pl
+# Jest to przekierowanie bezpieczne dla pozycjonowania
+RewriteCond %{HTTP_HOST} !^www.(.*)$ [NC]
+RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
+# jeżeli katalog lub plik istnieje użyj ich bezpośrednio
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# w przeciwnym razie przekieruj na index.php
+RewriteRule . index.php
