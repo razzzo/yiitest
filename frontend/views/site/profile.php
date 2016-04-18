@@ -27,13 +27,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'address')->textarea() ?>
 
-                <?= $form->field($model, 'city_size')->dropDownList([1 => 'wieś'], ['prompt' => 'wybierz ... ']) ?>
+                <?= $form->field($model, 'city_size')->dropDownList([1 => 'wioska', 2 => 'małe miasto', 3 => 'duże miasto', 4 => 'metropolia'], ['prompt' => 'wybierz ... ']) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Utwórz konto', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton('Zapisz zmiany', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
+        </div>
+        <div class="col-lg-5">
+            <p><?= $model->address ?></p>
+            <p><?= Yii::$app->formatter->asNtext($model->address) ?></p>
         </div>
     </div>
 </div>

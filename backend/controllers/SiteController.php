@@ -3,7 +3,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
+use backend\components\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
 
@@ -18,20 +18,16 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
+            'access' => parent::defaultAccessBehaviors([
+                 'class' => AccessControl::className(),
+                 'rules' => [
+                     [
+                         'actions' => ['index'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                     ],
+                 ],
+            ]),
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -55,6 +51,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        new \common\debug\Debug(Yii::$app->user->can('admin'));
         return $this->render('index');
     }
 

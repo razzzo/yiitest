@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\UserDetails;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -241,13 +242,41 @@ class SiteController extends Controller
 
         return $this->render('about');
     }
-    
+
     /**
      * Edycja danych użytkownika.
      * @return mixed
      */
     public function actionProfile()
     {
-        return $this->render('profile');
+        $model = $this->findModel(Yii::$app->user->identity->id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Zmiany zostały zapisane');
+            return $this->redirect(['index']);
+        } elseif (Yii::$app->request->isPost) {
+            Yii::$app->session->setFlash('error', 'Podczas zapisu wystąpił błąd.');
+            return $this->refresh();
+        }
+
+        return $this->render('profile', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Wczytuje AR szczegółów użytkownika lub zwraca nowo utworzony obiekt AR jeżeli szczegóły użytkownika nie istnieją.
+     * @param $id
+     * @return mixed
+     */
+    protected function findModel($id)
+    {
+        if (($model = UserDetails::findOne($id)) !== null) {
+            return $model;
+        } else {
+            $model = new UserDetails();
+            $model->user_id = $id;
+            return $model;
+        }
     }
 }
